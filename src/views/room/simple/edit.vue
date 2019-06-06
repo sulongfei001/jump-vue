@@ -15,7 +15,7 @@
       </el-form-item>
       <el-form-item label="选择门店" prop="remoteClubId">
         <el-select v-model="roomData.remoteClubId" placeholder="选择商品" >
-          <el-option v-for="(item,index) in clubList" :key="index" :label="item.clubName" :value="item.remoteClubId"/>
+          <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
         </el-select>
       </el-form-item>
       <el-form-item label="选择商品" prop="remoteGoodsId">
@@ -34,6 +34,9 @@
       </el-form-item>
       <el-form-item label="门票数量" prop="ticketNum">
         <el-input v-model.number="roomData.ticketNum" placeholder="请设置"/>
+      </el-form-item>
+      <el-form-item label="文本说明" prop="goodsText">
+        <el-input v-model="roomData.goodsText" type="textarea" placeholder="请设置"/>
       </el-form-item>
       <el-form-item label="大奖概率" prop="prizeProbability">
         <el-slider v-model="roomData.prizeProbability" :format-tooltip="formatTooltip" :max="100" show-input />
@@ -96,6 +99,7 @@ export default {
         goodsNum: undefined,
         goodsPrice: undefined,
         ticketNum: undefined,
+        goodsText: undefined,
         prizeProbability: 45,
         premiumProportion: 160,
         goodsPicture: undefined,
@@ -120,6 +124,7 @@ export default {
         goodsNum: [{ required: true, message: '不能为空', trigger: 'blur' }, { type: 'number', message: '必须为数字值', trigger: 'blur' }],
         goodsPrice: [{ required: true, message: '不能为空', trigger: 'blur' }],
         ticketNum: [{ required: true, message: '不能为空', trigger: 'blur' }, { type: 'number', message: '必须为数字值', trigger: 'blur' }],
+        goodsText: [{ required: true, message: '不能为空' }],
         prizeProbability: [{ required: true, message: '不能为空', trigger: 'blur' }],
         premiumProportion: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsPicture: [{ required: true, message: '不能为空' }]

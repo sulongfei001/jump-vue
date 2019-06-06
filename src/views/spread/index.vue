@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="listQuery.remoteClubId" placeholder="选择门店" clearable style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in clubList" :key="index" :label="item.clubName" :value="item.remoteClubId"/>
+        <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
       </el-select>
       <el-input v-model="listQuery.goodsName" placeholder="商品名称" clearable style="width: 200px;" class="filter-item" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>

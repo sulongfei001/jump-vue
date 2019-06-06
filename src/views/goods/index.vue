@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="listQuery.remoteClubId" placeholder="选择门店" clearable style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in clubList" :key="index" :label="item.clubName" :value="item.remoteClubId"/>
+        <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="synchClubData">同步</el-button>
@@ -20,6 +20,11 @@
           <span>{{ scope.row.goodsName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="商品图片" width="140" align="center">
+        <template slot-scope="scope">
+          <span><img :src="scope.row.goodsPicture" width="120" height="100"></span>
+        </template>
+      </el-table-column>
       <el-table-column label="商品价格" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsPrice }}</span>
@@ -28,6 +33,11 @@
       <el-table-column label="商品库存" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="可用库存" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remainNum }}</span>
         </template>
       </el-table-column>
     </el-table>

@@ -3,7 +3,7 @@
     <el-form ref="dataForm" :rules="rules" :model="goodsData" label-position="left" label-width="130px">
       <el-form-item label="选择门店" prop="remoteClubId">
         <el-select v-model="goodsData.remoteClubId" placeholder="选择商品" >
-          <el-option v-for="(item,index) in clubList" :key="index" :label="item.clubName" :value="item.remoteClubId"/>
+          <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
         </el-select>
       </el-form-item>
       <el-form-item label="选择商品" prop="remoteGoodsId">
