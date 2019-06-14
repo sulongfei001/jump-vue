@@ -18,7 +18,7 @@
         <el-input v-model.number="goodsData.goodsNum" placeholder="请设置"/>
       </el-form-item>
       <el-form-item label="商品价格" prop="goodsPrice">
-        <el-input v-model="goodsData.goodsPrice" placeholder="请设置"/>
+        <el-input v-model="goodsData.goodsPrice" placeholder="请设置" disabled/>
       </el-form-item>
       <el-form-item label="大奖概率" prop="prizeProbability">
         <el-slider v-model="goodsData.prizeProbability" :format-tooltip="formatTooltip" :max="100" show-input />
@@ -79,8 +79,8 @@ export default {
         goodsName: undefined,
         goodsNum: undefined,
         goodsPrice: undefined,
-        prizeProbability: 45,
-        premiumProportion: 160,
+        prizeProbability: 0,
+        premiumProportion: 0,
         goodsText: undefined,
         goodsPicture: undefined,
         picture1: undefined,
@@ -106,6 +106,12 @@ export default {
   watch: {
     'goodsData.remoteClubId'(newVal) {
       this.getGoodsAll()
+    },
+    'goodsData.remoteGoodsId'(newVal) {
+      this.changeGoodsPrice()
+    },
+    'goodsData.premiumProportion'(newVal) {
+      this.changeGoodsPrice()
     }
   },
   created() {
@@ -120,7 +126,6 @@ export default {
       if (requestParams.id !== '-1') {
         getSpreadGoodsInfo(requestParams.id).then((response) => {
           this.goodsData = response.data
-          console.log(this.goodsData)
         })
       }
     },
@@ -134,6 +139,12 @@ export default {
       fetchLocalGoodsByClubId({ remoteClubId }).then(response => {
         this.goodsList = response.data
       })
+    },
+    changeGoodsPrice() {
+      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.goodsData.remoteGoodsId })
+      if (remoteGoods && remoteGoods.goodsPrice && this.goodsData.premiumProportion) {
+        this.goodsData.goodsPrice = remoteGoods.goodsPrice * this.goodsData.premiumProportion / 100
+      }
     },
     goBack() {
       window.history.go(-1) // 回退上一级路由

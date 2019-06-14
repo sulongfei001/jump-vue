@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import qs from 'qs'
+// import qs from 'qs'
 import { getAccessToken } from '@/utils/auth'
 import router from '@/router'
 import Constants from '@/utils/constants'
@@ -14,23 +14,12 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    // Do something before request is sent
-    const requestMethod = config.method
-    if (requestMethod === 'post' || requestMethod === 'put') { // post 方式
-      let requestData = config.data
-      if (requestData === undefined || requestData === null || requestData === '') {
-        requestData = {}
-      }
-      requestData.access_token = getAccessToken(Constants.access_token) // 后台每个请求都追加sysCode参数
-      config.data = qs.stringify(requestData)
-    } else if (requestMethod === 'get' || requestMethod === 'delete') { // get 方式
-      let requestParams = config.params
-      if (requestParams === undefined || requestParams === null || requestParams === '') {
-        requestParams = {}
-      }
-      requestParams.access_token = getAccessToken(Constants.access_token) // 后台每个请求都追加sysCode参数
-      config.params = requestParams
+    let requestParams = config.params
+    if (requestParams === undefined || requestParams === null || requestParams === '') {
+      requestParams = {}
     }
+    requestParams.access_token = getAccessToken(Constants.access_token) // 后台每个请求都追加sysCode参数
+    config.params = requestParams
     return config
   },
   error => {
@@ -50,7 +39,6 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code === 1000 || res.code === 3000) {
-      console.log('eeeeeeeeeeee')
       Message({
         message: res.msg,
         type: 'error',

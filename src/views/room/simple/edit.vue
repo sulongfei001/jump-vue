@@ -14,7 +14,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="选择门店" prop="remoteClubId">
-        <el-select v-model="roomData.remoteClubId" placeholder="选择商品" >
+        <el-select v-model="roomData.remoteClubId" placeholder="选择门店" >
           <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
         </el-select>
       </el-form-item>
@@ -30,7 +30,7 @@
         <el-input v-model.number="roomData.goodsNum" placeholder="请设置"/>
       </el-form-item>
       <el-form-item label="商品价格" prop="goodsPrice">
-        <el-input v-model="roomData.goodsPrice" placeholder="请设置"/>
+        <el-input v-model="roomData.goodsPrice" placeholder="请设置" disabled/>
       </el-form-item>
       <el-form-item label="门票数量" prop="ticketNum">
         <el-input v-model.number="roomData.ticketNum" placeholder="请设置"/>
@@ -100,8 +100,8 @@ export default {
         goodsPrice: undefined,
         ticketNum: undefined,
         goodsText: undefined,
-        prizeProbability: 45,
-        premiumProportion: 160,
+        prizeProbability: 0,
+        premiumProportion: 0,
         goodsPicture: undefined,
         picture1: undefined,
         picture2: undefined,
@@ -134,6 +134,12 @@ export default {
   watch: {
     'roomData.remoteClubId'(newVal) {
       this.getGoodsAll()
+    },
+    'roomData.remoteGoodsId'(newVal) {
+      this.changeGoodsPrice()
+    },
+    'roomData.premiumProportion'(newVal) {
+      this.changeGoodsPrice()
     }
   },
   created() {
@@ -164,6 +170,12 @@ export default {
         this.clubList = response.data
       })
     },
+    changeGoodsPrice() {
+      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.roomData.remoteGoodsId })
+      if (remoteGoods && remoteGoods.goodsPrice && this.roomData.premiumProportion) {
+        this.roomData.goodsPrice = remoteGoods.goodsPrice * this.roomData.premiumProportion / 100
+      }
+    },
     goBack() {
       window.history.go(-1) // 回退上一级路由
       this.$store.dispatch('delVisitedView', this.tempRoute) // 关闭当前路由
@@ -181,7 +193,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.roomData)
           createRoom(this.roomData).then(() => {
             this.$message({
               type: 'success',
@@ -200,7 +211,6 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.roomData)
           updateRoom(this.roomData).then(() => {
             this.$message({
               type: 'success',

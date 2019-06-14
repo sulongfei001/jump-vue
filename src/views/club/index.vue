@@ -61,10 +61,16 @@
           <span>{{ scope.row.lastUpdateTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
+        <template slot-scope="scope">
+          <el-button v-waves type="primary" size="mini" @click="handleRank(scope.row)">排行榜</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getClubList" />
 
+    <prize-detail ref="dataForm" :club-id="clubId" :club-title="clubTitle" />
   </div>
 </template>
 
@@ -72,9 +78,10 @@
 import { fetchClubList, synchronizeClub } from '@/api/club'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import PrizeDetail from '@/views/system/prize/detail'
 
 export default {
-  components: { Pagination },
+  components: { Pagination, PrizeDetail },
   directives: { waves },
   data() {
     return {
@@ -85,7 +92,9 @@ export default {
       listQuery: {
         page: 1,
         pageSize: 20
-      }
+      },
+      clubId: undefined,
+      clubTitle: undefined
     }
   },
   created() {
@@ -101,6 +110,12 @@ export default {
       }).catch(() => {
         this.listLoading = false
       })
+    },
+    handleRank(row) {
+      const _this = this.$refs['dataForm']
+      _this.dialogFormVisible = true
+      this.clubId = row.remoteClubId
+      this.clubTitle = row.supplierName
     },
     synchClubData() {
       this.listLoading = true

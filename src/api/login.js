@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import Config from '@/utils/config'
 
 export function loginByUsername(username, password) {
-  const data = {
+  const params = {
     client_id: Config.client_id,
     client_secret: Config.client_secret,
     username,
@@ -12,7 +12,7 @@ export function loginByUsername(username, password) {
   return request({
     url: '/oauth/token',
     method: 'post',
-    data
+    params
   })
 }
 
