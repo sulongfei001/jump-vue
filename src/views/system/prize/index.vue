@@ -31,7 +31,7 @@
 <script>
 import { fetchLocalGoodsByClubId } from '@/api/goods'
 import { fetchClubAll } from '@/api/club'
-import { createRankPrize } from '@/api/prize'
+import { createRankPrize, rankPrizeList } from '@/api/prize'
 
 export default {
   inject: ['reload'],
@@ -51,13 +51,18 @@ export default {
   watch: {
     'data.remoteClubId'(newVal) {
       this.getGoodsAll()
+      this.getRankPrize()
     }
   },
   created() {
-    this.tempRoute = Object.assign({}, this.$route)
     this.getClubList()
   },
   methods: {
+    getRankPrize() {
+      rankPrizeList(this.data.remoteClubId).then(response => {
+        this.data.prizeList = response.data.prizeList
+      })
+    },
     getGoodsAll() {
       const remoteClubId = this.data.remoteClubId
       fetchLocalGoodsByClubId({ remoteClubId }).then(response => {

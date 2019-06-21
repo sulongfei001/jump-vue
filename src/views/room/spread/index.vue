@@ -45,6 +45,21 @@
           <span>{{ scope.row.winNum }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="大奖物品" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.spreadGoods.goodsName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="中奖人" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.user && scope.row.user.nickname ? scope.row.user.nickname : '' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="中将时间" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.winTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="房间状态" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status === 1 ? 'danger' : 'success'">{{ scope.row.status === 1 ? '结束' : '正常' }}</el-tag>
@@ -58,25 +73,14 @@
 </template>
 
 <script>
-import { fetchSimpleRoomList, deleteRoom } from '@/api/room'
+import { fetchSpreadRoomList } from '@/api/room'
 import { fetchClubAll } from '@/api/club'
-import waves from '@/directive/waves' // Waves directive
-import permission from '@/directive/permission'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
 export default {
-  name: 'RoomManage',
   components: { Pagination },
-  directives: { waves, permission },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        false: 'success',
-        true: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
+  directives: { waves },
   data() {
     return {
       tableKey: 0,
@@ -98,7 +102,7 @@ export default {
   methods: {
     getRoomList() { // 商品列表
       this.listLoading = true
-      fetchSimpleRoomList(this.listQuery).then(response => {
+      fetchSpreadRoomList(this.listQuery).then(response => {
         this.list = response.data
         this.total = response.total
         this.listLoading = false
@@ -110,21 +114,6 @@ export default {
       fetchClubAll().then(response => {
         this.clubList = response.data
       })
-    },
-    handleDelete(id) {
-      this.$confirm('此操作将永久删除数据，是否继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteRoom(id).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          this.getRoomList()
-        })
-      }).catch(() => {})
     },
     handleFilter() { // 搜索
       this.listQuery.page = 1

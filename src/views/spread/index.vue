@@ -24,19 +24,9 @@
           <span>{{ scope.row.goodsName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品价格" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.goodsPrice }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="商品数量" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsNum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="大奖概率(%)" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.prizeProbability }}</span>
         </template>
       </el-table-column>
       <el-table-column label="溢价比例(%)" align="center">

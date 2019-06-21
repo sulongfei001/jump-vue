@@ -8,6 +8,14 @@ export function fetchSimpleRoomList(data) {
   })
 }
 
+export function fetchSpreadRoomList(data) {
+  return service({
+    url: '/admin/room/spread/list',
+    method: 'post',
+    data
+  })
+}
+
 export function getRoomInfo(data) {
   return service({
     url: '/admin/room/simple/detail/' + data.id,

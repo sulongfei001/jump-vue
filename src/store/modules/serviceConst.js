@@ -1,4 +1,4 @@
-import { fetchCommonEnumInfo } from '@/api/common'
+import { fetchCommonEnumInfo } from '@/api/system'
 
 const serviceConst = {
   state: {

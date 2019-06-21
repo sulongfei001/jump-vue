@@ -48,11 +48,6 @@
           <span>{{ scope.row.goodsNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品价格" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.goodsPrice }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="门票数量" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ticketNum }}</span>
@@ -91,18 +86,8 @@ import permission from '@/directive/permission'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  name: 'RoomManage',
   components: { Pagination },
   directives: { waves, permission },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        false: 'success',
-        true: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       tableKey: 0,

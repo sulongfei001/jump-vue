@@ -30,6 +30,11 @@
           <span>{{ scope.row.goodsPrice }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="商品类型" align="center">
+        <template slot-scope="scope">
+          <span>{{ getGoodsType(scope.row.goodsType) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="商品库存" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsNum }}</span>
@@ -48,6 +53,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { fetchLocalGoodsList, synchronizeGoods } from '@/api/goods'
 import { fetchClubAll } from '@/api/club'
 import waves from '@/directive/waves' // Waves directive
@@ -70,11 +76,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'goodsTypeOptions'
+    ])
+  },
   created() {
     this.getGoodsList()
     this.getClubAll()
   },
   methods: {
+    getGoodsType(type) {
+      return this.goodsTypeOptions.filter(o => o.type === type)[0].value
+    },
     getGoodsList() { // 商品列表
       this.listLoading = true
       fetchLocalGoodsList(this.listQuery).then(response => {

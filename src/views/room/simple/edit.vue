@@ -30,7 +30,7 @@
         <el-input v-model.number="roomData.goodsNum" placeholder="请设置"/>
       </el-form-item>
       <el-form-item label="商品价格" prop="goodsPrice">
-        <el-input v-model="roomData.goodsPrice" placeholder="请设置" disabled/>
+        <el-input v-model="goodsPrice" placeholder="请设置" disabled/>
       </el-form-item>
       <el-form-item label="门票数量" prop="ticketNum">
         <el-input v-model.number="roomData.ticketNum" placeholder="请设置"/>
@@ -97,7 +97,6 @@ export default {
         remoteGoodsId: undefined,
         goodsName: undefined,
         goodsNum: undefined,
-        goodsPrice: undefined,
         ticketNum: undefined,
         goodsText: undefined,
         prizeProbability: 0,
@@ -122,7 +121,6 @@ export default {
         remoteGoodsId: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsName: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsNum: [{ required: true, message: '不能为空', trigger: 'blur' }, { type: 'number', message: '必须为数字值', trigger: 'blur' }],
-        goodsPrice: [{ required: true, message: '不能为空', trigger: 'blur' }],
         ticketNum: [{ required: true, message: '不能为空', trigger: 'blur' }, { type: 'number', message: '必须为数字值', trigger: 'blur' }],
         goodsText: [{ required: true, message: '不能为空' }],
         prizeProbability: [{ required: true, message: '不能为空', trigger: 'blur' }],
@@ -131,15 +129,17 @@ export default {
       }
     }
   },
+  computed: {
+    goodsPrice() {
+      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.roomData.remoteGoodsId })
+      if (remoteGoods && this.roomData.premiumProportion) {
+        return remoteGoods.goodsPrice * this.roomData.premiumProportion / 100
+      }
+    }
+  },
   watch: {
     'roomData.remoteClubId'(newVal) {
       this.getGoodsAll()
-    },
-    'roomData.remoteGoodsId'(newVal) {
-      this.changeGoodsPrice()
-    },
-    'roomData.premiumProportion'(newVal) {
-      this.changeGoodsPrice()
     }
   },
   created() {
@@ -169,12 +169,6 @@ export default {
       fetchClubAll({}).then(response => {
         this.clubList = response.data
       })
-    },
-    changeGoodsPrice() {
-      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.roomData.remoteGoodsId })
-      if (remoteGoods && remoteGoods.goodsPrice && this.roomData.premiumProportion) {
-        this.roomData.goodsPrice = remoteGoods.goodsPrice * this.roomData.premiumProportion / 100
-      }
     },
     goBack() {
       window.history.go(-1) // 回退上一级路由

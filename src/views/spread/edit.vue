@@ -18,10 +18,7 @@
         <el-input v-model.number="goodsData.goodsNum" placeholder="请设置"/>
       </el-form-item>
       <el-form-item label="商品价格" prop="goodsPrice">
-        <el-input v-model="goodsData.goodsPrice" placeholder="请设置" disabled/>
-      </el-form-item>
-      <el-form-item label="大奖概率" prop="prizeProbability">
-        <el-slider v-model="goodsData.prizeProbability" :format-tooltip="formatTooltip" :max="100" show-input />
+        <el-input v-model="goodsPrice" placeholder="请设置" disabled/>
       </el-form-item>
       <el-form-item label="溢价比例" prop="premiumProportion">
         <el-slider v-model="goodsData.premiumProportion" :format-tooltip="formatTooltip" :max="300" show-input />
@@ -78,8 +75,6 @@ export default {
         remoteGoodsId: undefined,
         goodsName: undefined,
         goodsNum: undefined,
-        goodsPrice: undefined,
-        prizeProbability: 0,
         premiumProportion: 0,
         goodsText: undefined,
         goodsPicture: undefined,
@@ -95,23 +90,23 @@ export default {
         remoteGoodsId: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsName: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsNum: [{ required: true, message: '不能为空', trigger: 'blur' }, { type: 'number', message: '必须为数字值', trigger: 'blur' }],
-        goodsPrice: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        prizeProbability: [{ required: true, message: '不能为空', trigger: 'blur' }],
         premiumProportion: [{ required: true, message: '不能为空', trigger: 'blur' }],
         goodsText: [{ required: true, message: '不能为空' }],
         goodsPicture: [{ required: true, message: '不能为空' }]
       }
     }
   },
+  computed: {
+    goodsPrice() {
+      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.goodsData.remoteGoodsId })
+      if (remoteGoods && this.goodsData.premiumProportion) {
+        return remoteGoods.goodsPrice * this.goodsData.premiumProportion / 100
+      }
+    }
+  },
   watch: {
     'goodsData.remoteClubId'(newVal) {
       this.getGoodsAll()
-    },
-    'goodsData.remoteGoodsId'(newVal) {
-      this.changeGoodsPrice()
-    },
-    'goodsData.premiumProportion'(newVal) {
-      this.changeGoodsPrice()
     }
   },
   created() {
@@ -139,12 +134,6 @@ export default {
       fetchLocalGoodsByClubId({ remoteClubId }).then(response => {
         this.goodsList = response.data
       })
-    },
-    changeGoodsPrice() {
-      const remoteGoods = this.goodsList.find((item) => { return item.remoteGoodsId === this.goodsData.remoteGoodsId })
-      if (remoteGoods && remoteGoods.goodsPrice && this.goodsData.premiumProportion) {
-        this.goodsData.goodsPrice = remoteGoods.goodsPrice * this.goodsData.premiumProportion / 100
-      }
     },
     goBack() {
       window.history.go(-1) // 回退上一级路由
