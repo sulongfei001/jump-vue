@@ -46,3 +46,19 @@ export function createRoom(data) {
     data
   })
 }
+
+export function fetchPrizeList(data) {
+  return service({
+    url: '/admin/room/simple/prize',
+    method: 'post',
+    data
+  })
+}
+
+export function sortSimpleRoom(data) {
+  return service({
+    url: '/admin/room/simple/sort',
+    method: 'post',
+    data
+  })
+}

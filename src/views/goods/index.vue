@@ -15,6 +15,16 @@
       fit
       highlight-current-row
       style="width: 100%;">
+      <el-table-column label="商品ID" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remoteGoodsId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="门店ID" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remoteClubId }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="商品名称" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsName }}</span>

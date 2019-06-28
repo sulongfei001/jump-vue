@@ -19,6 +19,11 @@
       fit
       highlight-current-row
       style="width: 100%;">
+      <el-table-column label="门店ID" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remoteClubId }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="商品名称" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsName }}</span>
@@ -27,6 +32,11 @@
       <el-table-column label="商品数量" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.goodsNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品单价" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.premiumProportion * scope.row.goods.goodsPrice / 100 }}</span>
         </template>
       </el-table-column>
       <el-table-column label="溢价比例(%)" align="center">

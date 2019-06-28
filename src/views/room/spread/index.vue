@@ -15,6 +15,11 @@
       fit
       highlight-current-row
       style="width: 100%;">
+      <el-table-column label="门店ID" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.remoteClubId }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" width="200" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>

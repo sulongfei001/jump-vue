@@ -1,28 +1,14 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container">
-      <el-select v-model="listQuery.remoteClubId" placeholder="选择门店" clearable style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-      <router-link :to="'/room/simple/edit/-1/create'">
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-edit">添加</el-button>
-      </router-link>
-    </div>
-
+  <el-dialog :visible.sync="dialogFormVisible" :title="clubTitle" width="80%" class="room-dialog">
     <el-table
       v-loading="listLoading"
       :key="tableKey"
       :data="list"
+      row-key="id"
       border
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="门店ID" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.remoteClubId }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="开始时间" width="200" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.startTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
@@ -73,55 +59,58 @@
           <span>{{ scope.row.prizeCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="210" class-name="small-padding fixed-width" fixed="right" align="center">
-        <template slot-scope="scope">
-          <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" @click="prizeList(scope.row.id)">记录</el-button>
-          <router-link v-permission="'ROLE_ADMIN'" :to="'/room/simple/edit/'+scope.row.id+'/update'">
-            <el-button type="primary" size="mini">编辑</el-button>
-          </router-link>
-          <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getRoomList" />
-
-    <prize-list ref="dataList" :room-id="roomId" />
-  </div>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="initData"/>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取消</el-button>
+      <el-button type="primary" @click="saveSort()">排序</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
-import { fetchSimpleRoomList, deleteRoom } from '@/api/room'
-import { fetchClubAll } from '@/api/club'
-import prizeList from '@/views/room/simple/prizeList'
-import waves from '@/directive/waves' // Waves directive
-import permission from '@/directive/permission'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { fetchSimpleRoomList, sortSimpleRoom } from '@/api/room'
+import Pagination from '@/components/Pagination'
+import Sortable from 'sortablejs'
 
 export default {
-  components: { Pagination, prizeList },
-  directives: { waves, permission },
+  components: { Pagination },
+  props: {
+    clubId: {
+      type: Number,
+      default: 0
+    },
+    clubTitle: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       tableKey: 0,
       list: null,
-      clubList: null,
       total: 0,
       listLoading: false,
       listQuery: {
+        remoteClubId: 0,
         page: 1,
-        pageSize: 20,
-        remoteClubId: undefined
+        pageSize: 5
       },
-      roomId: undefined
+      dialogFormVisible: false
     }
   },
-  created() {
-    this.getRoomList()
-    this.getClubAll()
+  watch: {
+    clubId(newVal) {
+      this.listQuery.remoteClubId = newVal
+      this.initData()
+    }
+  },
+  updated() {
+    this.setSort()
   },
   methods: {
-    getRoomList() { // 商品列表
+    initData() {
       this.listLoading = true
       fetchSimpleRoomList(this.listQuery).then(response => {
         this.list = response.data
@@ -131,35 +120,37 @@ export default {
         this.listLoading = false
       })
     },
-    getClubAll() {
-      fetchClubAll().then(response => {
-        this.clubList = response.data
-      })
-    },
-    prizeList(id) {
-      const _this = this.$refs['dataList']
-      _this.dialogFormVisible = true
-      this.roomId = id
-    },
-    handleDelete(id) {
-      this.$confirm('此操作将永久删除数据，是否继续？', '提示', {
+    saveSort() {
+      this.$confirm('确定这么排吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteRoom(id).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          this.getRoomList()
+        const array = []
+        this.list.forEach((v, i) => {
+          const sortSeq = {}
+          sortSeq.id = v.id
+          sortSeq.sequence = i
+          array.push(sortSeq)
         })
+        sortSimpleRoom(array).then(response => {
+        }).catch(() => {})
       }).catch(() => {})
     },
-    handleFilter() { // 搜索
-      this.listQuery.page = 1
-      this.getRoomList()
+    setSort() {
+      const el = document.querySelectorAll('.room-dialog .el-dialog .el-table__body-wrapper > table > tbody')[0]
+      this.sortable = Sortable.create(el, {
+        ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        setData: function(dataTransfer, dragEl) {
+          dataTransfer.setData('Text', '')
+        },
+        onEnd: evt => {
+          const targetRow = this.list.splice(evt.oldIndex, 1)[0]
+          this.list.splice(evt.newIndex, 0, targetRow)
+        }
+      })
     }
   }
 }
 </script>
+

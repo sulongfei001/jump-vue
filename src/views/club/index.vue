@@ -53,17 +53,18 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="最后更新时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.lastUpdateTime }}</span>
+          <span>{{ scope.row.lastUpdateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button v-waves type="primary" size="mini" @click="handleRank(scope.row)">排行榜</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:70px" @click="roomList(scope.row)">房间列表</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,6 +72,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getClubList" />
 
     <prize-detail ref="dataForm" :club-id="clubId" :club-title="clubTitle" />
+    <room-list ref="listForm" :club-id="clubId" :club-title="clubTitle"/>
   </div>
 </template>
 
@@ -79,9 +81,10 @@ import { fetchClubList, synchronizeClub } from '@/api/club'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import PrizeDetail from '@/views/system/prize/detail'
+import RoomList from '@/views/club/roomList'
 
 export default {
-  components: { Pagination, PrizeDetail },
+  components: { Pagination, PrizeDetail, RoomList },
   directives: { waves },
   data() {
     return {
@@ -113,6 +116,12 @@ export default {
     },
     handleRank(row) {
       const _this = this.$refs['dataForm']
+      _this.dialogFormVisible = true
+      this.clubId = row.remoteClubId
+      this.clubTitle = row.supplierName
+    },
+    roomList(row) {
+      const _this = this.$refs['listForm']
       _this.dialogFormVisible = true
       this.clubId = row.remoteClubId
       this.clubTitle = row.supplierName
