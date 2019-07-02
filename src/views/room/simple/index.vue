@@ -73,9 +73,10 @@
           <span>{{ scope.row.prizeCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="210" class-name="small-padding fixed-width" fixed="right" align="center">
+      <el-table-column label="操作" min-width="300" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
-          <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" @click="prizeList(scope.row.id)">记录</el-button>
+          <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" style="width:70px;margin:0;" @click="prizeList(scope.row.id)">中奖信息</el-button>
+          <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" style="width:70px;margin:0;" @click="historyTicket(scope.row.id)">游戏记录</el-button>
           <router-link v-permission="'ROLE_ADMIN'" :to="'/room/simple/edit/'+scope.row.id+'/update'">
             <el-button type="primary" size="mini">编辑</el-button>
           </router-link>
@@ -87,6 +88,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getRoomList" />
 
     <prize-list ref="dataList" :room-id="roomId" />
+    <history-ticket ref="historyList" />
   </div>
 </template>
 
@@ -94,12 +96,13 @@
 import { fetchSimpleRoomList, deleteRoom } from '@/api/room'
 import { fetchClubAll } from '@/api/club'
 import prizeList from '@/views/room/simple/prizeList'
+import historyTicket from '@/views/room/simple/historyTicket'
 import waves from '@/directive/waves' // Waves directive
 import permission from '@/directive/permission'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  components: { Pagination, prizeList },
+  components: { Pagination, prizeList, historyTicket },
   directives: { waves, permission },
   data() {
     return {
@@ -139,7 +142,12 @@ export default {
     prizeList(id) {
       const _this = this.$refs['dataList']
       _this.dialogFormVisible = true
-      this.roomId = id
+      _this.listQuery.id = id
+    },
+    historyTicket(id) {
+      const _this = this.$refs['historyList']
+      _this.visible = true
+      _this.listQuery.id = id
     },
     handleDelete(id) {
       this.$confirm('此操作将永久删除数据，是否继续？', '提示', {

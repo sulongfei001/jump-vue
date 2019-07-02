@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column label="消耗门票" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.ticketNum }}</span>
+          <span>{{ scope.row.ticketNum }}张</span>
         </template>
       </el-table-column>
       <el-table-column label="参与人数" align="center">
@@ -45,7 +45,7 @@
           <span>{{ scope.row.partakeNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="中奖人次" align="center">
+      <el-table-column label="第几人中奖" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.winNum }}</span>
         </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogFormVisible" title="中奖信息">
+  <el-dialog :visible.sync="visible" title="游戏记录">
     <el-table
       v-loading="listLoading"
       :key="tableKey"
@@ -23,6 +23,11 @@
           <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="格子数" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.integral }}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="initData"/>
@@ -30,7 +35,7 @@
 </template>
 
 <script>
-import { fetchPrizeList } from '@/api/room'
+import { fetchHistoryTicket } from '@/api/room'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -46,7 +51,7 @@ export default {
         page: 1,
         pageSize: 10
       },
-      dialogFormVisible: false
+      visible: false
     }
   },
   watch: {
@@ -57,7 +62,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      fetchPrizeList(this.listQuery).then(response => {
+      fetchHistoryTicket(this.listQuery).then(response => {
         this.list = response.data
         this.total = response.total
         this.listLoading = false

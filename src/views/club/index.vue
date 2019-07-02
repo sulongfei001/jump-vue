@@ -63,8 +63,8 @@
       </el-table-column>
       <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
-          <el-button v-waves type="primary" size="mini" @click="handleRank(scope.row)">排行榜</el-button>
-          <el-button v-waves type="primary" size="mini" style="width:70px" @click="roomList(scope.row)">房间列表</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:80px" @click="handleRank(scope.row)">排行榜奖励</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:68px" @click="roomList(scope.row)">房间列表</el-button>
         </template>
       </el-table-column>
     </el-table>

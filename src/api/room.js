@@ -55,6 +55,14 @@ export function fetchPrizeList(data) {
   })
 }
 
+export function fetchHistoryTicket(data) {
+  return service({
+    url: '/admin/room/simple/history',
+    method: 'post',
+    data
+  })
+}
+
 export function sortSimpleRoom(data) {
   return service({
     url: '/admin/room/simple/sort',
