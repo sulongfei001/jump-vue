@@ -31,3 +31,14 @@ export function modifyUser(data) {
     data
   })
 }
+
+/**
+ * 获取用户门票记录
+ */
+export function fetchTicketLog(data) {
+  return service({
+    url: '/admin/user/ticketLog',
+    method: 'post',
+    data
+  })
+}

@@ -76,16 +76,6 @@ import Sortable from 'sortablejs'
 
 export default {
   components: { Pagination },
-  props: {
-    clubId: {
-      type: Number,
-      default: 0
-    },
-    clubTitle: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       tableKey: 0,
@@ -95,8 +85,10 @@ export default {
       listQuery: {
         remoteClubId: 0,
         page: 1,
-        pageSize: 5
+        pageSize: 10
       },
+      clubId: undefined,
+      clubTitle: undefined,
       dialogFormVisible: false
     }
   },

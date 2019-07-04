@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogFormVisible" title="中奖信息">
+  <el-dialog :visible.sync="dialogFormVisible" :title="clubTitle" width="80%">
     <el-table
       v-loading="listLoading"
       :key="tableKey"
@@ -10,7 +10,7 @@
       style="width: 100%;">
       <el-table-column label="用户ID" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.userId }}</span>
+          <span>{{ scope.row.user.id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="用户名" align="center">
@@ -18,20 +18,21 @@
           <span>{{ scope.row.user.nickname }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="中奖时间" align="center">
+      <el-table-column label="总积分" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}</span>
+          <span>{{ scope.row.integral }}</span>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="initData"/>
+
   </el-dialog>
 </template>
 
 <script>
-import { fetchPrizeList } from '@/api/room'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { fetchRankList } from '@/api/club'
+import Pagination from '@/components/Pagination'
 
 export default {
   components: { Pagination },
@@ -42,22 +43,25 @@ export default {
       total: 0,
       listLoading: false,
       listQuery: {
-        id: 0,
+        remoteClubId: 0,
         page: 1,
         pageSize: 10
       },
+      clubId: undefined,
+      clubTitle: undefined,
       dialogFormVisible: false
     }
   },
   watch: {
-    'listQuery.id'(newVal) {
+    clubId(newVal) {
+      this.listQuery.remoteClubId = newVal
       this.initData()
     }
   },
   methods: {
     initData() {
       this.listLoading = true
-      fetchPrizeList(this.listQuery).then(response => {
+      fetchRankList(this.listQuery).then(response => {
         this.list = response.data
         this.total = response.total
         this.listLoading = false

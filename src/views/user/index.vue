@@ -51,24 +51,26 @@
       <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button v-waves type="primary" size="mini" @click="handleUpdate(scope.row)" >编辑</el-button>
-          <el-button v-waves type="primary" size="mini" >日志</el-button>
+          <el-button v-waves type="primary" size="mini" @click="ticketLog(scope.row.id)">日志</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getUserList" />
-    <edit-form ref="dataForm" />
+    <edit-form ref="dataForm" @getUserList="getUserList"/>
+    <ticket-log ref="logForm"/>
   </div>
 </template>
 
 <script>
 import { fetchUserList } from '@/api/user'
 import editForm from '@/views/user/editForm'
+import ticketLog from '@/views/user/ticketLog'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 
 export default {
-  components: { Pagination, editForm },
+  components: { Pagination, editForm, ticketLog },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -124,6 +126,11 @@ export default {
       const _this = this.$refs['dataForm']
       _this.dialogFormVisible = true
       _this.userData = Object.assign({}, row)
+    },
+    ticketLog(id) {
+      const _this = this.$refs['logForm']
+      _this.dialogFormVisible = true
+      _this.listQuery.id = id
     }
   }
 }

@@ -26,18 +26,10 @@ import { fetchLocalGoodsByClubId } from '@/api/goods'
 import { rankPrizeList } from '@/api/prize'
 
 export default {
-  props: {
-    clubId: {
-      type: Number,
-      default: 0
-    },
-    clubTitle: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
+      clubId: undefined,
+      clubTitle: undefined,
       dialogFormVisible: false,
       prizeList: [],
       goodsList: []

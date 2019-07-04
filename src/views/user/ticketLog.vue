@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible" title="游戏记录">
+  <el-dialog :visible.sync="dialogFormVisible" title="门票记录" width="80%">
     <el-table
       v-loading="listLoading"
       :key="tableKey"
@@ -8,19 +8,14 @@
       fit
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="用户ID" align="center">
+      <el-table-column label="房间类型" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.userId }}</span>
+          <span>{{ scope.row.roomType === 1 ? '游戏房间' : '推广员房间' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" align="center">
+      <el-table-column label="房间ID" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.user.nickname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="游戏时间" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.roomId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="格子数" align="center">
@@ -28,15 +23,31 @@
           <span>{{ scope.row.integral }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="是否中奖" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.isWin ? '是' : '否' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="消耗门票" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.consumeTicket }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="记录时间" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="initData"/>
+
   </el-dialog>
 </template>
 
 <script>
-import { fetchHistoryTicket } from '@/api/room'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { fetchTicketLog } from '@/api/user'
+import Pagination from '@/components/Pagination'
 
 export default {
   components: { Pagination },
@@ -51,7 +62,7 @@ export default {
         page: 1,
         pageSize: 10
       },
-      visible: false
+      dialogFormVisible: false
     }
   },
   watch: {
@@ -62,7 +73,7 @@ export default {
   methods: {
     initData() {
       this.listLoading = true
-      fetchHistoryTicket(this.listQuery).then(response => {
+      fetchTicketLog(this.listQuery).then(response => {
         this.list = response.data
         this.total = response.total
         this.listLoading = false

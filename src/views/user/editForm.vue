@@ -47,6 +47,8 @@ export default {
               type: 'success',
               message: '操作成功'
             })
+            this.dialogFormVisible = false
+            this.$emit('getUserList')
           }).catch(() => {
             this.$message({
               type: 'error',

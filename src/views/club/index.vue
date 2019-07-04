@@ -61,18 +61,20 @@
           <span>{{ scope.row.lastUpdateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
+      <el-table-column label="操作" min-width="270" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
-          <el-button v-waves type="primary" size="mini" style="width:80px" @click="handleRank(scope.row)">排行榜奖励</el-button>
-          <el-button v-waves type="primary" size="mini" style="width:68px" @click="roomList(scope.row)">房间列表</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:80px;margin:0;" @click="handleRank(scope.row)">排行榜奖励</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:80px;margin:0;" @click="handleIntegral(scope.row)">排行榜积分</el-button>
+          <el-button v-waves type="primary" size="mini" style="width:68px;margin:0;" @click="roomList(scope.row)">房间列表</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getClubList" />
 
-    <prize-detail ref="dataForm" :club-id="clubId" :club-title="clubTitle" />
-    <room-list ref="listForm" :club-id="clubId" :club-title="clubTitle"/>
+    <prize-detail ref="dataForm" />
+    <room-list ref="listForm" />
+    <integral-list ref="integralForm"/>
   </div>
 </template>
 
@@ -81,10 +83,11 @@ import { fetchClubList, synchronizeClub } from '@/api/club'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import PrizeDetail from '@/views/system/prize/detail'
+import IntegralList from '@/views/club/integralList'
 import RoomList from '@/views/club/roomList'
 
 export default {
-  components: { Pagination, PrizeDetail, RoomList },
+  components: { Pagination, PrizeDetail, RoomList, IntegralList },
   directives: { waves },
   data() {
     return {
@@ -95,9 +98,7 @@ export default {
       listQuery: {
         page: 1,
         pageSize: 20
-      },
-      clubId: undefined,
-      clubTitle: undefined
+      }
     }
   },
   created() {
@@ -117,14 +118,20 @@ export default {
     handleRank(row) {
       const _this = this.$refs['dataForm']
       _this.dialogFormVisible = true
-      this.clubId = row.remoteClubId
-      this.clubTitle = row.supplierName
+      _this.clubId = row.remoteClubId
+      _this.clubTitle = row.supplierName
+    },
+    handleIntegral(row) {
+      const _this = this.$refs['integralForm']
+      _this.dialogFormVisible = true
+      _this.clubId = row.remoteClubId
+      _this.clubTitle = row.supplierName
     },
     roomList(row) {
       const _this = this.$refs['listForm']
       _this.dialogFormVisible = true
-      this.clubId = row.remoteClubId
-      this.clubTitle = row.supplierName
+      _this.clubId = row.remoteClubId
+      _this.clubTitle = row.supplierName
     },
     synchClubData() {
       this.listLoading = true
