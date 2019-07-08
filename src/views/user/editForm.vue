@@ -7,9 +7,6 @@
       <el-form-item label="昵称" prop="nickname">
         <el-input v-model="userData.nickname" placeholder="请设置"/>
       </el-form-item>
-      <el-form-item label="门票数量" prop="ticketNum">
-        <el-input v-model="userData.ticketNum" placeholder="请设置"/>
-      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -27,14 +24,12 @@ export default {
       userData: {
         id: undefined,
         phoneNumber: undefined,
-        nickname: undefined,
-        ticketNum: undefined
+        nickname: undefined
       },
       dialogFormVisible: false,
       rules: {
         phoneNumber: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        nickname: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        ticketNum: [{ required: true, message: '不能为空', trigger: 'blur' }]
+        nickname: [{ required: true, message: '不能为空', trigger: 'blur' }]
       }
     }
   },

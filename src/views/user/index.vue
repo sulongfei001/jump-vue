@@ -38,11 +38,6 @@
           <el-tag :type="scope.row.gender | statusFilter">{{ scope.row.gender | genderFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="门票数量" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.ticketNum }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="最近登录时间" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.lastOperationTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
