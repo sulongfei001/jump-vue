@@ -61,7 +61,7 @@
           <span>{{ scope.row.lastUpdateTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="270" class-name="small-padding fixed-width" fixed="right" align="center">
+      <el-table-column label="操作" width="270" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button v-waves type="primary" size="mini" style="width:80px;margin:0;" @click="handleRank(scope.row)">排行榜奖励</el-button>
           <el-button v-waves type="primary" size="mini" style="width:80px;margin:0;" @click="handleIntegral(scope.row)">排行榜积分</el-button>

@@ -73,7 +73,7 @@
           <span>{{ scope.row.prizeCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="300" class-name="small-padding fixed-width" fixed="right" align="center">
+      <el-table-column label="操作" width="300" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
           <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" style="width:70px;margin:0;" @click="prizeList(scope.row.id)">中奖信息</el-button>
           <el-button v-permission="'ROLE_ADMIN'" type="primary" size="mini" style="width:70px;margin:0;" @click="historyTicket(scope.row.id)">游戏记录</el-button>

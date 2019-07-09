@@ -8,6 +8,11 @@
       fit
       highlight-current-row
       style="width: 100%;">
+      <el-table-column label="序号" width="100px" align="center">
+        <template slot-scope="{row,$index}">
+          <span>{{ $index + 1 }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="用户ID" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>

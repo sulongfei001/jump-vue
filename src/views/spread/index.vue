@@ -44,7 +44,7 @@
           <span>{{ scope.row.premiumProportion }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="150" class-name="small-padding fixed-width" fixed="right" align="center">
+      <el-table-column label="操作" width="150" class-name="small-padding fixed-width" fixed="right" align="center">
         <template slot-scope="scope">
           <router-link v-permission="'ROLE_ADMIN'" :to="'/spread/edit/'+scope.row.id+'/update'">
             <el-button type="primary" size="mini">编辑</el-button>

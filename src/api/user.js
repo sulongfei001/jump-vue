@@ -42,3 +42,36 @@ export function fetchTicketLog(data) {
     data
   })
 }
+
+/**
+ * 获取用户门票列表
+ */
+export function fetchTicketList(data) {
+  return service({
+    url: '/admin/user/ticketList',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 获取某门店门票
+ */
+export function fetchOneTicket(data) {
+  return service({
+    url: '/admin/user/oneTicket',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 更新某门店门票
+ */
+export function modifyTicket(data) {
+  return service({
+    url: '/admin/user/modifyTicket',
+    method: 'post',
+    data
+  })
+}
