@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="是否中奖" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.isWin ? '是' : '否' }}</span>
+          <el-tag :type="scope.row.isWin ? 'danger' : 'info'" class="font-weight:bold">{{ scope.row.isWin ? '是' : '否' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="消耗门票" align="center">
