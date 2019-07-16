@@ -78,10 +78,10 @@ export default {
         this.__resizeHandler()
       }
     },
-    setOptions({ expectedData, actualData, fantasyData } = {}) {
+    setOptions({ registerData, xaxisData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
+          data: xaxisData,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -107,10 +107,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual', 'fantasy']
+          data: ['registerData']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: 'registerData', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -121,49 +121,9 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: registerData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
-        },
-        {
-          name: 'actual',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#7dfa11',
-              lineStyle: {
-                color: '#7dfa11',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        },
-        {
-          name: 'fantasy',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
-                color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
-              }
-            }
-          },
-          data: fantasyData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
         }]
       })
     },

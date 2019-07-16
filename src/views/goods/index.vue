@@ -32,7 +32,12 @@
       </el-table-column>
       <el-table-column label="商品图片" width="140" align="center">
         <template slot-scope="scope">
-          <span><img :src="scope.row.goodsPicture" width="120" height="100"></span>
+          <el-popover trigger="hover" placement="top">
+            <p>商品说明: {{ scope.row.goodsText }}</p>
+            <div slot="reference" class="name-wrapper">
+              <span><img :src="scope.row.goodsPicture" width="120" height="100"></span>
+            </div>
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column label="商品价格" align="center">
@@ -55,10 +60,15 @@
           <span>{{ scope.row.remainNum }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" class-name="small-padding fixed-width" fixed="right" align="center">
+        <template slot-scope="scope">
+          <el-button v-waves type="primary" size="mini" style="margin:0;" @click="handleUpdate(scope.row)" >编辑</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pageSize" @pagination="getGoodsList" />
-
+    <edit-form ref="dataForm" @getGoodsList="getGoodsList"/>
   </div>
 </template>
 
@@ -66,11 +76,12 @@
 import { mapGetters } from 'vuex'
 import { fetchLocalGoodsList, synchronizeGoods } from '@/api/goods'
 import { fetchClubAll } from '@/api/club'
+import editForm from '@/views/goods/editForm'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
-  components: { Pagination },
+  components: { Pagination, editForm },
   directives: { waves },
   data() {
     return {
@@ -117,6 +128,11 @@ export default {
     handleFilter() { // 搜索
       this.listQuery.page = 1
       this.getGoodsList()
+    },
+    handleUpdate(row) {
+      const _this = this.$refs['dataForm']
+      _this.dialogFormVisible = true
+      _this.goodsData = Object.assign({}, row)
     },
     synchClubData() {
       this.listLoading = true

@@ -17,6 +17,14 @@ export function fetchLocalGoodsByClubId(data) {
   })
 }
 
+export function updateLocalGoods(data) {
+  return service({
+    url: '/admin/goods/local/update',
+    method: 'put',
+    data
+  })
+}
+
 export function fetchSpreadGoodsList(data) {
   return service({
     url: '/admin/goods/spread/list',

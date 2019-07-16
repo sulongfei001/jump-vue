@@ -22,11 +22,23 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    chartData: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
       chart: null
+    }
+  },
+  watch: {
+    chartData: {
+      deep: true,
+      handler(val) {
+        this.setOptions(val)
+      }
     }
   },
   mounted() {
@@ -47,9 +59,7 @@ export default {
     this.chart = null
   },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
+    setOptions({ registerData, xaxisData } = {}) {
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -58,7 +68,7 @@ export default {
           }
         },
         grid: {
-          top: 10,
+          top: 30,
           left: '2%',
           right: '2%',
           bottom: '3%',
@@ -66,7 +76,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: xaxisData,
           axisTick: {
             alignWithLabel: true
           }
@@ -77,29 +87,22 @@ export default {
             show: false
           }
         }],
+        legend: {
+          data: ['registerData']
+        },
         series: [{
-          name: 'pageA',
+          name: 'registerData',
           type: 'bar',
           stack: 'vistors',
-          barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          barWidth: '20%',
+          data: registerData,
           animationDuration
         }]
       })
+    },
+    initChart() {
+      this.chart = echarts.init(this.$el, 'macarons')
+      this.setOptions(this.chartData)
     }
   }
 }
