@@ -1,12 +1,20 @@
 <template>
   <div class="app-container">
     <el-form ref="dataForm" :rules="rules" :model="data" label-position="left" label-width="130px">
-      <el-form-item label="选择门店" prop="remoteClubId">
-        <el-select v-model="data.remoteClubId" placeholder="选择门店" >
-          <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
-        </el-select>
-      </el-form-item>
-      <el-row v-for="(item,i) in data.prizeList" :gutter="24" :key="i" type="flex">
+      <el-row :gutter="40">
+        <el-col :span="8">
+          <el-form-item label="选择门店" prop="remoteClubId">
+            <el-select v-model="data.remoteClubId" placeholder="选择门店" >
+              <el-option v-for="(item,index) in clubList" :key="index" :label="item.supplierName" :value="item.remoteClubId"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-button type="primary" @click="createDom()">添加名次</el-button>
+          <el-button type="primary" @click="createData()">确认提交</el-button>
+        </el-col>
+      </el-row>
+      <el-row v-for="(item,i) in data.prizeList" :key="i" :gutter="40">
         <el-col :span="8">
           <el-form-item label="选择商品">
             <el-select v-model="data.prizeList[i].remoteGoodsId" placeholder="选择商品" >
@@ -14,17 +22,13 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="设置数量" >
-            <el-input v-model="data.prizeList[i].goodsNum" placeholder="请设置"/>
+            <el-input v-model="data.prizeList[i].goodsNum" placeholder="请设置" style="max-width:200px;"/>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="createDom()">添加名次</el-button>
-      <el-button type="primary" @click="createData()">确认提交</el-button>
-    </div>
   </div>
 </template>
 

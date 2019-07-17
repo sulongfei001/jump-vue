@@ -1,46 +1,46 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+      <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">注册人数</div>
-          <count-to :start-val="0" :end-val="registerCustomer" :duration="2600" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="chartData.registerCount" :duration="2600" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">当天商户入驻数</div>
-          <count-to :start-val="0" :end-val="registerSeller" :duration="3000" class="card-panel-num"/>
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+      <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="money" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">当天营业额</div>
-          <count-to :start-val="0" :end-val="turnover" :duration="3200" class="card-panel-num"/>
+          <div class="card-panel-text">充值金额</div>
+          <count-to :start-val="0" :end-val="chartData.chargeCount" :decimals="2" :duration="3200" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+      <div class="card-panel" >
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">充值用户</div>
+          <count-to :start-val="0" :end-val="chartData.chargePeople" :duration="3000" class="card-panel-num"/>
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-shopping">
           <svg-icon icon-class="shopping" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">当天订单数</div>
-          <count-to :start-val="0" :end-val="orderCount" :duration="3600" class="card-panel-num"/>
+          <div class="card-panel-text">人均付费</div>
+          <count-to :start-val="0" :end-val="average" :decimals="2" :duration="3600" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -54,18 +54,26 @@ export default {
   components: {
     CountTo
   },
+  props: {
+    chartData: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      registerCustomer: 0, // 注册人数
-      registerSeller: 0, // 入驻商户数
-      turnover: 0, // 营业额
-      orderCount: 1000 // 下单数
+    }
+  },
+  computed: {
+    average: function() {
+      if (this.chartData.chargeCount === 0 || this.chartData.chargePeople === 0) {
+        return 0
+      } else {
+        return this.chartData.chargeCount / this.chartData.chargePeople
+      }
     }
   },
   methods: {
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
-    }
   }
 }
 </script>

@@ -7,7 +7,7 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
 
-const animationDuration = 6000
+const animationDuration = 1000
 
 export default {
   props: {
@@ -59,12 +59,12 @@ export default {
     this.chart = null
   },
   methods: {
-    setOptions({ registerData, xaxisData } = {}) {
+    setOptions({ registerData, chargeData, xaxisData } = {}) {
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          axisPointer: {
+            type: 'shadow'
           }
         },
         grid: {
@@ -88,14 +88,20 @@ export default {
           }
         }],
         legend: {
-          data: ['registerData']
+          data: ['新增用户', '充值用户']
         },
         series: [{
-          name: 'registerData',
+          name: '新增用户',
           type: 'bar',
-          stack: 'vistors',
-          barWidth: '20%',
+          barGap: 0,
           data: registerData,
+          animationDuration
+        },
+        {
+          name: '充值用户',
+          type: 'bar',
+          barGap: 0,
+          data: chargeData,
           animationDuration
         }]
       })
